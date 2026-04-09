@@ -40,18 +40,20 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Type check
+        run: npx vue-tsc -b
+
       - name: Build
         env:
-          # Vite needs a sub-path base when hosted at https://<owner>.github.io/<repo>/.
-          # github.event.repository.name expands to the repo name automatically,
-          # so the same workflow works for any fork without manual edits.
-          BASE_PATH: /${{ github.event.repository.name }}/
           # Optional repo-level overrides — set these in:
           # Settings → Secrets and variables → Actions → Variables.
           # Both fall back to the defaults baked into the source if unset.
           VITE_DEFAULT_REPO_URL: ${{ vars.VITE_DEFAULT_REPO_URL }}
           VITE_ALLOW_URL_CHANGE: ${{ vars.VITE_ALLOW_URL_CHANGE }}
-        run: npm run build
+        # Vite needs a sub-path base when hosted at https://<owner>.github.io/<repo>/.
+        # github.event.repository.name expands to the repo name automatically,
+        # so the same workflow works for any fork without manual edits.
+        run: npx vite build --base=/${{ github.event.repository.name }}/
 
       - name: Add SPA fallback (404.html)
         # Hash-mode router doesn't strictly need this, but it lets the deep-link
