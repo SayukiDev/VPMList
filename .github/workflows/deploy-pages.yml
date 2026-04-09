@@ -47,9 +47,11 @@ jobs:
         env:
           # Optional repo-level overrides — set these in:
           # Settings → Secrets and variables → Actions → Variables.
-          # Both fall back to the defaults baked into the source if unset.
+          # All fall back to the defaults baked into the source if unset.
           VITE_DEFAULT_REPO_URL: ${{ vars.VITE_DEFAULT_REPO_URL }}
           VITE_ALLOW_URL_CHANGE: ${{ vars.VITE_ALLOW_URL_CHANGE }}
+          # Auto-link the header GitHub icon back to this repo.
+          VITE_GITHUB_URL: ${{ vars.VITE_GITHUB_URL || format('https://github.com/{0}', github.repository) }}
         # Vite needs a sub-path base when hosted at https://<owner>.github.io/<repo>/.
         # github.event.repository.name expands to the repo name automatically,
         # so the same workflow works for any fork without manual edits.

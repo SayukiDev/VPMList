@@ -8,6 +8,11 @@ interface ImportMetaEnv {
    * the URL bar is read-only and only VITE_DEFAULT_REPO_URL is ever loaded.
    */
   readonly VITE_ALLOW_URL_CHANGE?: string;
+  /**
+   * Optional GitHub repository URL. When set, a GitHub icon link is shown
+   * in the header. Leave unset to hide the icon entirely.
+   */
+  readonly VITE_GITHUB_URL?: string;
 }
 
 interface ImportMeta {

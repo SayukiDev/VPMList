@@ -6,6 +6,8 @@ import { useSettingsStore, type Locale, type ThemeMode } from '@/stores/settings
 const settings = useSettingsStore();
 const { t } = useI18n();
 
+const githubUrl = import.meta.env.VITE_GITHUB_URL;
+
 const themeOptions = computed(() => [
   { label: t('header.theme.light'), value: 'light' as ThemeMode, icon: 'pi pi-sun' },
   { label: t('header.theme.system'), value: 'system' as ThemeMode, icon: 'pi pi-desktop' },
@@ -61,6 +63,17 @@ const localeProxy = computed({
           aria-label="Language"
           :allow-empty="false"
         />
+        <a
+          v-if="githubUrl"
+          v-tooltip.bottom="'GitHub'"
+          :href="githubUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub repository"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-md text-surface-700 dark:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+        >
+          <i class="pi pi-github text-lg" />
+        </a>
       </div>
     </div>
   </header>
