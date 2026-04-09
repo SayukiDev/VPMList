@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@import 'primeicons/primeicons.css';
+
+@plugin "tailwindcss-primeui";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    'Inter',
+    'Segoe UI',
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
+  background-color: var(--p-content-background);
+  color: var(--p-text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
