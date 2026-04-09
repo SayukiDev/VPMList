@@ -149,6 +149,25 @@ no proxy in the loop.
 - VPM repository manifest spec — <https://vcc.docs.vrchat.com/vpm/repos>
 - VPM package manifest spec — <https://vcc.docs.vrchat.com/vpm/packages>
 
+## Deploying to GitHub Pages
+
+A ready-to-go workflow lives at
+[`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml).
+On every push to `main` / `master` it lints, tests, builds with
+`BASE_PATH=/<repo-name>/`, and publishes `dist/` to GitHub Pages.
+
+Before the first run:
+
+1. In your repo settings, enable **Pages → Build and deployment → Source: GitHub Actions**.
+2. (Optional) Define repository **Variables** under
+   _Settings → Secrets and variables → Actions → Variables_:
+   - `VITE_DEFAULT_REPO_URL` — the listing the deployed site should display.
+   - `VITE_ALLOW_URL_CHANGE` — set to `true` to let visitors browse other repositories.
+3. Push to `main`. The workflow can also be triggered manually from the
+   Actions tab.
+
+The site will be available at `https://<owner>.github.io/<repo>/`.
+
 ## License
 
 Released under the **GNU General Public License v3.0**.

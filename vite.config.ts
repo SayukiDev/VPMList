@@ -8,6 +8,9 @@ import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Allows project-pages-style hosting (e.g. https://user.github.io/<repo>/)
+  // by setting BASE_PATH=/<repo>/ at build time. Defaults to "/" for local dev.
+  base: process.env.BASE_PATH || '/',
   plugins: [
     vue(),
     tailwindcss(),

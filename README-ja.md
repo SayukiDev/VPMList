@@ -150,6 +150,23 @@ VPMList はマニフェストをブラウザから直接取得するため、対
 - VPM リポジトリマニフェスト仕様 — <https://vcc.docs.vrchat.com/vpm/repos>
 - VPM パッケージマニフェスト仕様 — <https://vcc.docs.vrchat.com/vpm/packages>
 
+## GitHub Pages へのデプロイ
+
+すぐに使えるワークフローを
+[`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml)
+に同梱しています。`main` / `master` への push ごとに lint → test → ビルド
+(`BASE_PATH=/<repo 名>/`) → `dist/` を GitHub Pages に公開します。
+
+初回セットアップ:
+
+1. リポジトリ設定で **Pages → Build and deployment → Source: GitHub Actions** を選択。
+2. (任意) **Settings → Secrets and variables → Actions → Variables** に以下を定義:
+   - `VITE_DEFAULT_REPO_URL` — デプロイしたサイトに表示するリスティング URL
+   - `VITE_ALLOW_URL_CHANGE` — `true` にすると訪問者が別リポジトリを閲覧可能
+3. `main` に push。Actions タブから手動実行 (`workflow_dispatch`) も可能です。
+
+公開後の URL は `https://<owner>.github.io/<repo>/` になります。
+
 ## ライセンス
 
 **GNU General Public License v3.0** で公開しています。

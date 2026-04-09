@@ -1,0 +1,79 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Allow GITHUB_TOKEN to deploy to Pages and verify deploy origin via OIDC.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Don't run two deploys at once. New pushes wait for the in-flight one to
+# finish so we never publish a half-built site.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        env:
+          # Vite needs a sub-path base when hosted at https://<owner>.github.io/<repo>/.
+          # github.event.repository.name expands to the repo name automatically,
+          # so the same workflow works for any fork without manual edits.
+          BASE_PATH: /${{ github.event.repository.name }}/
+          # Optional repo-level overrides — set these in:
+          # Settings → Secrets and variables → Actions → Variables.
+          # Both fall back to the defaults baked into the source if unset.
+          VITE_DEFAULT_REPO_URL: ${{ vars.VITE_DEFAULT_REPO_URL }}
+          VITE_ALLOW_URL_CHANGE: ${{ vars.VITE_ALLOW_URL_CHANGE }}
+        run: npm run build
+
+      - name: Add SPA fallback (404.html)
+        # Hash-mode router doesn't strictly need this, but it lets the deep-link
+        # 404 page show the same UI instead of GitHub's default error.
+        run: cp dist/index.html dist/404.html
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
